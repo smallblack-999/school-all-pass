@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 歐帕糖保衛戰 - 測試版</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #111; font-family: sans-serif; }
+        #ui {
+            position: absolute; top: 20px; width: 100%; text-align: center;
+            color: white; font-size: 24px; font-weight: bold; pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); z-index: 10;
+        }
+        #instructions {
+            position: absolute; bottom: 20px; width: 100%; text-align: center;
+            color: #ccc; font-size: 16px; pointer-events: none; z-index: 10;
+        }
+        #error-msg {
+            position: absolute; top: 45%; width: 100%; text-align: center;
+            color: #ff4d4d; font-size: 18px; font-weight: bold; display: none; z-index: 20;
+            padding: 10px; background: rgba(0,0,0,0.7);
+        }
+    </style>
+    <!-- 備用載入點一：unpkg 伺服器 -->
+    <script src="https://unpkg.com"></script>
+</head>
+<body>
+
+    <div id="ui">🏫 3D 學校教室測試基地</div>
+    <div id="error-msg">⚠️ 3D 引擎載入失敗！請檢查網路連線，或嘗試使用其他瀏覽器（如 Firefox）開啟。</div>
+    <div id="instructions">【控制說明】使用鍵盤 WASD 或 方向鍵 移動立體學生 | 空白鍵變形（測試中）</div>
+
+    <script>
+        // 安全檢查：如果備用點一失效，自動嘗試載入備用點二 (cdnjs)
+        if (typeof THREE === 'undefined') {
+            document.write('<script src="https://cloudflare.com"><\/script>');
+        }
+
+        // 確保 THREE.js 成功載入後才執行遊戲邏輯
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (typeof THREE === 'undefined') {
+                    document.getElementById('error-msg').style.display = 'block';
+                    return;
+                }
+                initGame();
+            }, 200);
+        });
+
+        function initGame() {
+            // 1. 建立 3D 場景與渲染器
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a); // 暗灰背景層次感
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // 2. 新增立體燈光
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // 環境基礎光
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8); // 教室頂燈光
+            dirLight.position.set(5, 15, 10);
+            scene.add(dirLight);
+
+            // 3. 建立 3D 教室地板（經典黑板綠色）
+            const floorGeo = new THREE.BoxGeometry(30, 0.5, 20);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e3d2f, roughness: 0.5 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.position.y = -0.25; 
+            scene.add(floor);
+
+            // 4. 建立 3D 學生（暫時用金黃色立體長方體代表）
+            const studentGeo = new THREE.BoxGeometry(1, 1.6, 1);
+            const studentMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.3 });
+            const student = new THREE.Mesh(studentGeo, studentMat);
+            student.position.set(-8, 0.8, 0); 
+            scene.add(student);
+
+            // 5. 建立 3D 老師（暫時用亮橘紅色圓柱體代表）
+            const teacherGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.8, 16);
+            const teacherMat = new THREE.MeshStandardMaterial({ color: 0xff4500, roughness: 0.4 });
+            const teacher = new THREE.Mesh(teacherGeo, teacherMat);
+            teacher.position.set(8, 0.9, 0); 
+            scene.add(teacher);
+
+            // 6. 設定 3D 攝影機視角（斜上方鳥瞰教室，最適合觀察全場）
+            camera.position.set(0, 14, 14);
+            camera.lookAt(0, 0, 0);
+
+            // 7. 鍵盤按鍵監聽
+            const keys = {};
+            window.addEventListener('keydown', (e) => {
+                keys[e.key.toLowerCase()] = true;
+                // 阻擋鍵盤方向鍵和空白鍵滾動網頁捲軸
+                if (["space", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(e.code.toLowerCase())) {
+                    e.preventDefault();
+                }
+            });
+            window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
+
+            const moveSpeed = 0.15;
+
+            // 8. 3D 動畫渲染主迴圈
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // 操控學生移動
+                if (keys['w'] || keys['arrowup']) student.position.z -= moveSpeed;
+                if (keys['s'] || keys['arrowdown']) student.position.z += moveSpeed;
+                if (keys['a'] || keys['arrowleft']) student.position.x -= moveSpeed;
+                if (keys['d'] || keys['arrowright']) student.position.x += moveSpeed;
+
+                // 限制學生不能跑出黑板綠的地板邊界
+                student.position.x = Math.max(-14, Math.min(14, student.position.x));
+                student.position.z = Math.max(-9, Math.min(9, student.position.z));
+
+                // 讓 3D 老師的身體轉向，盯著學生移動的方向
+                teacher.lookAt(student.position.x, teacher.position.y, student.position.z);
+
+                // 渲染 3D 場景
+                renderer.render(scene, camera);
+            }
+
+            // 視窗大小自適應縮放
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // 正式開跑
+            animate();
+        }
+    </script>
+</body>
+</html>
