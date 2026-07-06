@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D 歐帕糖保衛戰 - 完整測試版</title>
+    <title>3D 歐帕糖保衛戰 - 極速穩定版</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #111; font-family: sans-serif; }
         #ui {
@@ -16,8 +16,8 @@
             color: #ccc; font-size: 16px; pointer-events: none; z-index: 10;
         }
     </style>
-    <!-- 使用穩定不卡關的 3D 引擎主庫 -->
-    <script src="https://unpkg.com"></script>
+    <!-- 更換為全球連線最快、最穩定的 cdnjs 加速伺服器 -->
+    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
@@ -25,63 +25,70 @@
     <div id="instructions">【學生控制】WASD 或方向鍵移動 | 【空白鍵】變身成 3D 課桌椅（不動時免疫粉筆！）</div>
 
     <script>
-        // 確保 3D 引擎加載完畢後啟動
+        // 確保 3D 引擎完全準備好後再執行
         window.addEventListener('load', () => {
             if (typeof THREE !== 'undefined') {
                 initGame();
             } else {
-                alert("網路不穩，請重新整理網頁！");
+                // 如果連 cdnjs 都慢，直接動態生成基礎核心，確保不卡黑畫面
+                alert("正在切換備用高速節點，請點擊確定...");
+                let script = document.createElement('script');
+                script.src = "https://jsdelivr.net";
+                script.onload = () => { initGame(); };
+                document.head.appendChild(script);
             }
         });
 
         function initGame() {
-            // 1. 3D 場景基本設定
             const scene = new THREE.Scene();
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+            
+            // 避免重複生成畫布
+            if(document.getElementsByTagName('canvas').length === 0) {
+                document.body.appendChild(renderer.domElement);
+            }
 
-            // 2. 增加立體光源
+            // 燈光
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
             const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
             dirLight.position.set(10, 20, 10);
             scene.add(dirLight);
 
-            // 3. 3D 教室綠地板
+            // 3D 教室地板
             const floorGeo = new THREE.BoxGeometry(30, 0.5, 20);
             const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e3d2f, roughness: 0.5 });
             const floor = new THREE.Mesh(floorGeo, floorMat);
             floor.position.y = -0.25; 
             scene.add(floor);
 
-            // 4. 3D 學生與他的兩種變身幾何體
-            const humanGeo = new THREE.BoxGeometry(1, 1.6, 1); // 學生人形
-            const chairGeo = new THREE.BoxGeometry(1.2, 1.0, 1.2); // 課桌椅型態
-            const studentMat = new THREE.MeshStandardMaterial({ color: 0xffd700 }); // 金色學生
-            const chairMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.6 }); // 木頭色桌椅
+            // 3D 學生與變身幾何體
+            const humanGeo = new THREE.BoxGeometry(1, 1.6, 1); 
+            const chairGeo = new THREE.BoxGeometry(1.2, 1.0, 1.2); 
+            const studentMat = new THREE.MeshStandardMaterial({ color: 0xffd700 }); 
+            const chairMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.6 }); 
 
             const student = new THREE.Mesh(humanGeo, studentMat);
             student.position.set(-10, 0.8, 0); 
             scene.add(student);
 
-            // 遊戲邏輯變數
             let isChair = false; 
             let isMoving = false;
             let score = 0;
             let gameOver = false;
 
-            // 5. 3D 老師 (紅色圓柱)
+            // 3D 老師
             const teacherGeo = new THREE.CylinderGeometry(0.6, 0.6, 1.8, 16);
             const teacherMat = new THREE.MeshStandardMaterial({ color: 0xff4500 });
             const teacher = new THREE.Mesh(teacherGeo, teacherMat);
             teacher.position.set(10, 0.9, 0); 
             scene.add(teacher);
 
-            // 6. 3D 歐帕糖 (發光的粉紅立體球)
+            // 3D 歐帕糖
             const candyGeo = new THREE.SphereGeometry(0.4, 16, 16);
             const candyMat = new THREE.MeshStandardMaterial({ color: 0xff69b4, emissive: 0xff1493 });
             const candy = new THREE.Mesh(candyGeo, candyMat);
@@ -92,20 +99,17 @@
                 candy.position.set(Math.random() * 16 - 8, 0.4, Math.random() * 14 - 7);
             }
 
-            // 7. 粉筆（子彈）陣列
             let chalks = [];
 
-            // 設定 3D 攝影機視角
             camera.position.set(0, 16, 15);
             camera.lookAt(0, 0, -2);
 
-            // 8. 控制監聽
             const keys = {};
             window.addEventListener('keydown', (e) => {
                 keys[e.key.toLowerCase()] = true;
                 if (e.code === 'Space' && !gameOver) {
                     e.preventDefault();
-                    isChair = !isChair; // 切換變身狀態
+                    isChair = !isChair;
                     if (isChair) {
                         student.geometry = chairGeo;
                         student.material = chairMat;
@@ -124,14 +128,12 @@
             });
             window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
 
-            // 老師自動每 1.5 秒朝學生丟一次粉筆
             let lastShot = 0;
 
             function animate(timestamp) {
                 if (gameOver) return;
                 requestAnimationFrame(animate);
 
-                // 判斷移動
                 isMoving = false;
                 const moveSpeed = 0.12;
                 if (keys['w'] || keys['arrowup']) { student.position.z -= moveSpeed; isMoving = true; }
@@ -139,38 +141,30 @@
                 if (keys['a'] || keys['arrowleft']) { student.position.x -= moveSpeed; isMoving = true; }
                 if (keys['d'] || keys['arrowright']) { student.position.x += moveSpeed; isMoving = true; }
 
-                // 限制邊界
                 student.position.x = Math.max(-14, Math.min(14, student.position.x));
                 student.position.z = Math.max(-9, Math.min(9, student.position.z));
 
-                // 老師盯著學生
                 teacher.lookAt(student.position.x, teacher.position.y, student.position.z);
 
-                // 老師開火邏輯：每 1.2 秒發射一顆粉筆
                 if (timestamp - lastShot > 1200) {
                     lastShot = timestamp;
-                    // 建立 3D 粉筆 (白色小球)
                     const chalkGeo = new THREE.SphereGeometry(0.18, 8, 8);
                     const chalkMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
                     const chalk = new THREE.Mesh(chalkGeo, chalkMat);
                     chalk.position.copy(teacher.position);
-                    chalk.position.y = 1.2; // 從老師手部高度發射
+                    chalk.position.y = 1.2;
 
-                    // 計算飛向學生的 3D 方向向量
                     const direction = new THREE.Vector3().subVectors(student.position, teacher.position).normalize();
                     chalks.push({ mesh: chalk, dir: direction });
                     scene.add(chalk);
                 }
 
-                // 移動粉筆與碰撞偵測
                 for (let i = chalks.length - 1; i >= 0; i--) {
                     const c = chalks[i];
-                    c.mesh.position.addScaledVector(c.dir, 0.25); // 粉筆飛行速度
+                    c.mesh.position.addScaledVector(c.dir, 0.25);
 
-                    // 檢查粉筆有沒有砸到學生
                     let dist = c.mesh.position.distanceTo(student.position);
                     if (dist < 1.0) {
-                        // 核心規則：如果學生正在移動，或是「維持學生人形沒變身」，被砸到直接重修！
                         if (isMoving || !isChair) {
                             document.getElementById('status').innerText = "被粉筆砸中！退學重修！";
                             document.getElementById('status').style.color = "#ff4d4d";
@@ -181,14 +175,12 @@
                         continue;
                     }
 
-                    // 超出教室清除
                     if (c.mesh.position.x < -16 || c.mesh.position.x > 16 || c.mesh.position.z < -11 || c.mesh.position.z > 11) {
                         scene.remove(c.mesh);
                         chalks.splice(i, 1);
                     }
                 }
 
-                // 學生吃歐帕糖偵測
                 if (student.position.distanceTo(candy.position) < 1.2) {
                     score++;
                     document.getElementById('score').innerText = score;
