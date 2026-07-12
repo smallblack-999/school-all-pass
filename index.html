@@ -3,207 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D 歐帕糖保衛戰 - 極速穩定版</title>
+    <title>瘋狂班導 - 期末大老二爭霸賽</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #111; font-family: sans-serif; }
-        #ui {
-            position: absolute; top: 20px; width: 100%; text-align: center;
-            color: white; font-size: 24px; font-weight: bold; pointer-events: none;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); z-index: 10;
-        }
-        #instructions {
-            position: absolute; bottom: 20px; width: 100%; text-align: center;
-            color: #ccc; font-size: 16px; pointer-events: none; z-index: 10;
-        }
+        body { margin: 0; background: #1a1a1a; color: #fff; font-family: "Microsoft JhengHei", sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .game-container { max-width: 600px; width: 100%; background: #2a2a2a; border-radius: 12px; padding: 25px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; border: 2px solid #ff4757; }
+        .image-placeholder { width: 100%; height: 250px; background: #3d3d3d; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 20px; border: 2px dashed #ff7f50; }
+        .story-text { font-size: 18px; line-height: 1.6; margin-bottom: 25px; text-align: left; background: #1e1e1e; padding: 15px; border-radius: 6px; border-left: 5px solid #ff4757; }
+        .btn-container { display: flex; flex-direction: column; gap: 12px; }
+        button { background: #ff4757; color: white; border: none; padding: 15px 20px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        button:hover { background: #ff6b81; transform: translateY(-2px); }
+        button:active { transform: translateY(1px); }
+        .restart-btn { background: #2ed573; text-align: center; }
+        .restart-btn:hover { background: #26af5f; }
     </style>
-    <!-- 更換為全球連線最快、最穩定的 cdnjs 加速伺服器 -->
-    <script src="https://cloudflare.com"></script>
 </head>
 <body>
 
-    <div id="ui">🏫 3D 歐帕糖保衛戰：<span id="score">0</span>/5 顆 | 狀態：<span id="status" style="color: #ffffd0;">躲藏中</span></div>
-    <div id="instructions">【學生控制】WASD 或方向鍵移動 | 【空白鍵】變身成 3D 課桌椅（不動時免疫粉筆！）</div>
+    <div class="game-container">
+        <!-- 畫面上方顯示：搞笑迷因圖區（未來可換成真實照片） -->
+        <div id="game-image" class="image-placeholder">🤤💤</div>
+        
+        <!-- 文字顯示區 -->
+        <div id="game-story" class="story-text">
+            載入中...
+        </div>
+        
+        <!-- 下方三個按鈕區 -->
+        <div id="game-options" class="btn-container">
+            <!-- 按鈕會由 JavaScript 動態生成 -->
+        </div>
+    </div>
 
     <script>
-        // 確保 3D 引擎完全準備好後再執行
-        window.addEventListener('load', () => {
-            if (typeof THREE !== 'undefined') {
-                initGame();
-            } else {
-                // 如果連 cdnjs 都慢，直接動態生成基礎核心，確保不卡黑畫面
-                alert("正在切換備用高速節點，請點擊確定...");
-                let script = document.createElement('script');
-                script.src = "https://jsdelivr.net";
-                script.onload = () => { initGame(); };
-                document.head.appendChild(script);
+        // 劇情資料庫（文字與選項結構）
+        const storyData = {
+            start: {
+                text: "【早上 8:45，你猛然驚醒！】<br><br>今天大老二期末爭霸賽你快遲到了，而且這堂課的教授超級嚴格，遲到直接當掉。這時候你決定...",
+                image: "🤤💤",
+                options: [
+                    { text: "👉 【按鈕 A】：施展火影跑，用時速 50 公里狂飆去學校！", nextNode: "routeA_fail" },
+                    { text: "👉 【按鈕 B】：打電話給教授，騙他說你被外星人綁架了。", nextNode: "routeB_step2" },
+                    { text: "👉 【按鈕 C】：既然都遲到了，乾脆躺回去繼續睡，下午再去吃烤肉。", nextNode: "routeC_fail" }
+                ]
+            },
+            // 選項 A 結局
+            routeA_fail: {
+                text: "【結局：物理崩壞】<br><br>你全速狂飆，試圖突破人體極限。沒想到在校門口過彎時，因為時速過快摩擦生熱，你的鞋底直接燒起來，最後連人帶鞋滑進警衛室。被當場依涉及危險駕駛移送法辦，期末賽直接出局。<br><br>❌ 挑戰失敗！教授無情地給了你一個 0 分。",
+                image: "🏃‍♂️🔥",
+                options: [{ text: "🔄 重新投胎，這次早點起床", nextNode: "start", isRestart: true }]
+            },
+            // 選項 C 結局
+            routeC_fail: {
+                text: "【結局：鹹魚的代價】<br><br>你蓋上棉被繼續大睡。下午你確實吃到了香噴噴的烤肉，但當你打開手機看群組時，發現教授發了公告：『今天沒來參加大老二爭霸賽的，明年請早。』<br><br>❌ 挑戰失敗！你獲得了重修的榮譽車票。",
+                image: "🥩😴",
+                options: [{ text: "🔄 不甘心！重新挑戰", nextNode: "start", isRestart: true }]
+            },
+            // 選項 B 的下一輪分支（新的 ABC 選項）
+            routeB_step2: {
+                text: "【電話接通了...】<br><br>你用顫抖的聲音大喊：『教授！我被外星人綁架了！他們要研究我的大老二技術！』<br><br>教授沉默了五秒，竟然回答：『喔？是嗎？剛好我最近在做星際社會學研究，那你現在要怎麼向我證明？』<br><br>這時候你決定再出哪一招：",
+                image: "👽📞",
+                options: [
+                    { text: "👉 【按鈕 A】：用嘴巴發出『嗶嗶啵啵』的電子微波音效，假裝訊號不好。", nextNode: "routeB_A_fail" },
+                    { text: "👉 【按鈕 B】：大喊『為了地球的和平！』然後直接掛教授電話。", nextNode: "routeB_B_fail" },
+                    { text: "👉 【按鈕 C】：說外星人要跟你賭一把大老二，贏了才放你走，邀請教授線上語音當軍師。", nextNode: "routeB_C_win" }
+                ]
+            },
+            // B-A 失敗
+            routeB_A_fail: {
+                text: "【結局：拙劣的演技】<br><br>你『嗶啵』了半天，教授冷冷地說：『同學，你的背景聲音有摩托車除草的聲音，而且你按到擴音了。』隨後傳來一聲掛斷的嘟嘟聲。<br><br>❌ 挑戰失敗！你的智商受到了教授的無情羞辱，並且被當掉了。",
+                image: "🤡❌",
+                options: [{ text: "🔄 換個劇本重新挑戰", nextNode: "start", isRestart: true }]
+            },
+            // B-B 失敗
+            routeB_B_fail: {
+                text: "【結局：不可饒恕】<br><br>你霸氣掛掉電話。等下午你清醒走到學校時，發現你的置物櫃已經被清空，教授在黑板上寫著你的大名，旁邊畫了一個大大的叉叉。<br><br>❌ 挑戰失敗！敢掛瘋狂班導的電話，你是第一人，也是重修的第一人。",
+                image: "🤬💥",
+                options: [{ text: "🔄 乖乖重來，這次客氣點", nextNode: "start", isRestart: true }]
+            },
+            // B-C 唯一通關結局
+            routeB_C_win: {
+                text: "【👑 唯一通關：大老二星際外交官】<br><br>教授一聽到『外星人要賭大老二』，身為瘋狂班導的賭性瞬間被激發！他立刻在電話裡瘋狂指導你：『聽著！先出鐵支！不要留梅花三！』<br><br>在教授的遠端神指揮下，你成功（在想像中）擊敗了外星人。教授非常高興，認為你為地球爭光，不僅沒當你，還直接給了你期末總成績 100 分！<br><br>🎉 恭喜通關！你成為了傳說中的星際大老二之神！",
+                image: "👑🃏",
+                options: [{ text: "🎉 太神啦！再玩一局", nextNode: "start", isRestart: true }]
             }
-        });
+        };
 
-        function initGame() {
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1a1a1a);
+        // 遊戲核心驅動函式
+        function goToNode(nodeKey) {
+            const node = storyData[nodeKey];
+            if (!node) return;
 
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            // 更新搞笑迷因圖標 / 照片區
+            document.getElementById('game-image').innerHTML = node.image;
             
-            // 避免重複生成畫布
-            if(document.getElementsByTagName('canvas').length === 0) {
-                document.body.appendChild(renderer.domElement);
-            }
-
-            // 燈光
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(ambientLight);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-            dirLight.position.set(10, 20, 10);
-            scene.add(dirLight);
-
-            // 3D 教室地板
-            const floorGeo = new THREE.BoxGeometry(30, 0.5, 20);
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e3d2f, roughness: 0.5 });
-            const floor = new THREE.Mesh(floorGeo, floorMat);
-            floor.position.y = -0.25; 
-            scene.add(floor);
-
-            // 3D 學生與變身幾何體
-            const humanGeo = new THREE.BoxGeometry(1, 1.6, 1); 
-            const chairGeo = new THREE.BoxGeometry(1.2, 1.0, 1.2); 
-            const studentMat = new THREE.MeshStandardMaterial({ color: 0xffd700 }); 
-            const chairMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.6 }); 
-
-            const student = new THREE.Mesh(humanGeo, studentMat);
-            student.position.set(-10, 0.8, 0); 
-            scene.add(student);
-
-            let isChair = false; 
-            let isMoving = false;
-            let score = 0;
-            let gameOver = false;
-
-            // 3D 老師
-            const teacherGeo = new THREE.CylinderGeometry(0.6, 0.6, 1.8, 16);
-            const teacherMat = new THREE.MeshStandardMaterial({ color: 0xff4500 });
-            const teacher = new THREE.Mesh(teacherGeo, teacherMat);
-            teacher.position.set(10, 0.9, 0); 
-            scene.add(teacher);
-
-            // 3D 歐帕糖
-            const candyGeo = new THREE.SphereGeometry(0.4, 16, 16);
-            const candyMat = new THREE.MeshStandardMaterial({ color: 0xff69b4, emissive: 0xff1493 });
-            const candy = new THREE.Mesh(candyGeo, candyMat);
-            resetCandy();
-            scene.add(candy);
-
-            function resetCandy() {
-                candy.position.set(Math.random() * 16 - 8, 0.4, Math.random() * 14 - 7);
-            }
-
-            let chalks = [];
-
-            camera.position.set(0, 16, 15);
-            camera.lookAt(0, 0, -2);
-
-            const keys = {};
-            window.addEventListener('keydown', (e) => {
-                keys[e.key.toLowerCase()] = true;
-                if (e.code === 'Space' && !gameOver) {
-                    e.preventDefault();
-                    isChair = !isChair;
-                    if (isChair) {
-                        student.geometry = chairGeo;
-                        student.material = chairMat;
-                        document.getElementById('status').innerText = "已偽裝成課桌椅";
-                        document.getElementById('status').style.color = "#a0ffa0";
-                    } else {
-                        student.geometry = humanGeo;
-                        student.material = studentMat;
-                        document.getElementById('status').innerText = "學生型態";
-                        document.getElementById('status').style.color = "#ffd700";
-                    }
+            // 更新故事文字
+            document.getElementById('game-story').innerHTML = node.text;
+            
+            // 清空舊按鈕並生成新按鈕
+            const optionsContainer = document.getElementById('game-options');
+            optionsContainer.innerHTML = "";
+            
+            node.options.forEach(opt => {
+                const button = document.createElement('button');
+                button.innerHTML = opt.text;
+                
+                // 如果是重新開始按鈕，給予特殊綠色外觀
+                if (opt.isRestart) {
+                    button.classList.add('restart-btn');
                 }
-                if (["arrowup", "arrowdown", "arrowleft", "arrowright"].includes(e.code.toLowerCase())) {
-                    e.preventDefault();
-                }
+                
+                // 綁定點擊事件，通往下一段劇情
+                button.addEventListener('click', () => {
+                    goToNode(opt.nextNode);
+                });
+                
+                optionsContainer.appendChild(button);
             });
-            window.addEventListener('keyup', (e) => keys[e.key.toLowerCase()] = false);
-
-            let lastShot = 0;
-
-            function animate(timestamp) {
-                if (gameOver) return;
-                requestAnimationFrame(animate);
-
-                isMoving = false;
-                const moveSpeed = 0.12;
-                if (keys['w'] || keys['arrowup']) { student.position.z -= moveSpeed; isMoving = true; }
-                if (keys['s'] || keys['arrowdown']) { student.position.z += moveSpeed; isMoving = true; }
-                if (keys['a'] || keys['arrowleft']) { student.position.x -= moveSpeed; isMoving = true; }
-                if (keys['d'] || keys['arrowright']) { student.position.x += moveSpeed; isMoving = true; }
-
-                student.position.x = Math.max(-14, Math.min(14, student.position.x));
-                student.position.z = Math.max(-9, Math.min(9, student.position.z));
-
-                teacher.lookAt(student.position.x, teacher.position.y, student.position.z);
-
-                if (timestamp - lastShot > 1200) {
-                    lastShot = timestamp;
-                    const chalkGeo = new THREE.SphereGeometry(0.18, 8, 8);
-                    const chalkMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-                    const chalk = new THREE.Mesh(chalkGeo, chalkMat);
-                    chalk.position.copy(teacher.position);
-                    chalk.position.y = 1.2;
-
-                    const direction = new THREE.Vector3().subVectors(student.position, teacher.position).normalize();
-                    chalks.push({ mesh: chalk, dir: direction });
-                    scene.add(chalk);
-                }
-
-                for (let i = chalks.length - 1; i >= 0; i--) {
-                    const c = chalks[i];
-                    c.mesh.position.addScaledVector(c.dir, 0.25);
-
-                    let dist = c.mesh.position.distanceTo(student.position);
-                    if (dist < 1.0) {
-                        if (isMoving || !isChair) {
-                            document.getElementById('status').innerText = "被粉筆砸中！退學重修！";
-                            document.getElementById('status').style.color = "#ff4d4d";
-                            gameOver = true;
-                        }
-                        scene.remove(c.mesh);
-                        chalks.splice(i, 1);
-                        continue;
-                    }
-
-                    if (c.mesh.position.x < -16 || c.mesh.position.x > 16 || c.mesh.position.z < -11 || c.mesh.position.z > 11) {
-                        scene.remove(c.mesh);
-                        chalks.splice(i, 1);
-                    }
-                }
-
-                if (student.position.distanceTo(candy.position) < 1.2) {
-                    score++;
-                    document.getElementById('score').innerText = score;
-                    if (score >= 5) {
-                        document.getElementById('status').innerText = "成功拿到 5 顆歐帕糖！順利畢業！";
-                        document.getElementById('status').style.color = "#00ff00";
-                        gameOver = true;
-                    } else {
-                        resetCandy();
-                    }
-                }
-
-                renderer.render(scene, camera);
-            }
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-
-            requestAnimationFrame(animate);
         }
+
+        // 遊戲初始化，從 start 節點開始
+        goToNode('start');
     </script>
 </body>
 </html>
