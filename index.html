@@ -3,125 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>瘋狂班導 - 期末大老二爭霸賽</title>
+    <title>瘋狂班導 - 叮噹期末考</title>
     <style>
-        body { margin: 0; background: #1a1a1a; color: #fff; font-family: "Microsoft JhengHei", sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .game-container { max-width: 600px; width: 100%; background: #2a2a2a; border-radius: 12px; padding: 25px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; border: 2px solid #ff4757; }
-        .image-placeholder { width: 100%; height: 250px; background: #3d3d3d; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 20px; border: 2px dashed #ff7f50; }
-        .story-text { font-size: 18px; line-height: 1.6; margin-bottom: 25px; text-align: left; background: #1e1e1e; padding: 15px; border-radius: 6px; border-left: 5px solid #ff4757; }
-        .btn-container { display: flex; flex-direction: column; gap: 12px; }
-        button { background: #ff4757; color: white; border: none; padding: 15px 20px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        button:hover { background: #ff6b81; transform: translateY(-2px); }
+        body { margin: 0; background: #121212; color: #ffffff; font-family: "Microsoft JhengHei", sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .game-container { max-width: 600px; width: 100%; background: #1e1e1e; border-radius: 16px; padding: 30px; box-shadow: 0 12px 32px rgba(0,0,0,0.6); text-align: center; border: 2px solid #3498db; }
+        .image-placeholder { width: 100%; height: 220px; background: #2d2d2d; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 50px; margin-bottom: 25px; border: 2px dashed #3498db; }
+        .story-text { font-size: 18px; line-height: 1.7; margin-bottom: 30px; text-align: left; background: #262626; padding: 20px; border-radius: 8px; border-left: 6px solid #e74c3c; min-height: 100px; }
+        .btn-container { display: flex; flex-direction: column; gap: 14px; }
+        button { background: #3498db; color: white; border: none; padding: 16px 20px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        button:hover { background: #2980b9; transform: translateY(-2px); }
         button:active { transform: translateY(1px); }
-        .restart-btn { background: #2ed573; text-align: center; }
-        .restart-btn:hover { background: #26af5f; }
+        .restart-btn { background: #2ecc71; text-align: center; }
+        .restart-btn:hover { background: #27ae60; }
     </style>
 </head>
 <body>
 
     <div class="game-container">
-        <!-- 畫面上方顯示：搞笑迷因圖區（未來可換成真實照片） -->
         <div id="game-image" class="image-placeholder">🤤💤</div>
-        
-        <!-- 文字顯示區 -->
-        <div id="game-story" class="story-text">
-            載入中...
-        </div>
-        
-        <!-- 下方三個按鈕區 -->
-        <div id="game-options" class="btn-container">
-            <!-- 按鈕會由 JavaScript 動態生成 -->
-        </div>
+        <div id="game-story" class="story-text">載入劇情中...</div>
+        <div id="game-options" class="btn-container"></div>
     </div>
 
     <script>
-        // 劇情資料庫（文字與選項結構）
+        // 完整的 5 層 ABC 選項大劇本資料庫
         const storyData = {
             start: {
-                text: "【早上 8:45，你猛然驚醒！】<br><br>今天大老二期末爭霸賽你快遲到了，而且這堂課的教授超級嚴格，遲到直接當掉。這時候你決定...",
+                text: "【早上 8:45，你猛然驚醒！】<br><br>今天『叮噹期末考』你快遲到了！這堂課的教授出了名的瘋狂，遲到一秒直接當掉。這時候你決定...",
                 image: "🤤💤",
                 options: [
-                    { text: "👉 【按鈕 A】：施展火影跑，用時速 50 公里狂飆去學校！", nextNode: "routeA_fail" },
-                    { text: "👉 【按鈕 B】：打電話給教授，騙他說你被外星人綁架了。", nextNode: "routeB_step2" },
-                    { text: "👉 【按鈕 C】：既然都遲到了，乾脆躺回去繼續睡，下午再去吃烤肉。", nextNode: "routeC_fail" }
+                    { text: "👉 【按鈕 A】：施展火影跑，用時速 50 公里狂飆去學校！", nextNode: "fail_1" },
+                    { text: "👉 【按鈕 B】：打電話給教授，騙他說你被外星人綁架了。", nextNode: "routeB_1" },
+                    { text: "👉 【按鈕 C】：既然都遲到了，乾脆躺回去繼續睡，下午再去吃烤肉。", nextNode: "fail_2" }
                 ]
             },
-            // 選項 A 結局
-            routeA_fail: {
-                text: "【結局：物理崩壞】<br><br>你全速狂飆，試圖突破人體極限。沒想到在校門口過彎時，因為時速過快摩擦生熱，你的鞋底直接燒起來，最後連人帶鞋滑進警衛室。被當場依涉及危險駕駛移送法辦，期末賽直接出局。<br><br>❌ 挑戰失敗！教授無情地給了你一個 0 分。",
-                image: "🏃‍♂️🔥",
-                options: [{ text: "🔄 重新投胎，這次早點起床", nextNode: "start", isRestart: true }]
-            },
-            // 選項 C 結局
-            routeC_fail: {
-                text: "【結局：鹹魚的代價】<br><br>你蓋上棉被繼續大睡。下午你確實吃到了香噴噴的烤肉，但當你打開手機看群組時，發現教授發了公告：『今天沒來參加大老二爭霸賽的，明年請早。』<br><br>❌ 挑戰失敗！你獲得了重修的榮譽車票。",
-                image: "🥩😴",
-                options: [{ text: "🔄 不甘心！重新挑戰", nextNode: "start", isRestart: true }]
-            },
-            // 選項 B 的下一輪分支（新的 ABC 選項）
-            routeB_step2: {
-                text: "【電話接通了...】<br><br>你用顫抖的聲音大喊：『教授！我被外星人綁架了！他們要研究我的大老二技術！』<br><br>教授沉默了五秒，竟然回答：『喔？是嗎？剛好我最近在做星際社會學研究，那你現在要怎麼向我證明？』<br><br>這時候你決定再出哪一招：",
+            // ----- 第 1 層 分支 -----
+            routeB_1: {
+                text: "【分支 1：星際謊言】<br><br>教授接起電話。你大喊被外星人綁架了！教授冷笑：『喔？外星人長怎樣？說不出來立刻當！』你決定回答：",
                 image: "👽📞",
                 options: [
-                    { text: "👉 【按鈕 A】：用嘴巴發出『嗶嗶啵啵』的電子微波音效，假裝訊號不好。", nextNode: "routeB_A_fail" },
-                    { text: "👉 【按鈕 B】：大喊『為了地球的和平！』然後直接掛教授電話。", nextNode: "routeB_B_fail" },
-                    { text: "👉 【按鈕 C】：說外星人要跟你賭一把大老二，贏了才放你走，邀請教授線上語音當軍師。", nextNode: "routeB_C_win" }
+                    { text: "👉 【按鈕 A】：皮膚是綠色的，長得很像學校大門口的警衛大叔。", nextNode: "fail_3" },
+                    { text: "👉 【按鈕 B】：他們全身散發霓虹光，手上拿著微積分課本，說要跟我對決叮噹考！", nextNode: "routeB_2" },
+                    { text: "👉 【按鈕 C】：他們是一坨巨大的會飄浮的滷肉飯，正在把我塞進電鍋。", nextNode: "fail_4" }
                 ]
             },
-            // B-A 失敗
-            routeB_A_fail: {
-                text: "【結局：拙劣的演技】<br><br>你『嗶啵』了半天，教授冷冷地說：『同學，你的背景聲音有摩托車除草的聲音，而且你按到擴音了。』隨後傳來一聲掛斷的嘟嘟聲。<br><br>❌ 挑戰失敗！你的智商受到了教授的無情羞辱，並且被當掉了。",
-                image: "🤡❌",
-                options: [{ text: "🔄 換個劇本重新挑戰", nextNode: "start", isRestart: true }]
+            // ----- 第 2 層 分支 -----
+            routeB_2: {
+                text: "【分支 2：外星考題】<br><br>教授聽了非常興奮：『微積分外星人？有意思！那外星人考你什麼題目？』你大腦飛速運轉，決定扯出這個題目：",
+                image: "🧠⚡",
+                options: [
+                    { text: "👉 【按鈕 A】：他們問我宇宙的盡頭是不是 42？", nextNode: "fail_5" },
+                    { text: "👉 【按鈕 B】：他們要我當場心算 π（圓周率）的小數點後第 100 位！", nextNode: "routeB_3" },
+                    { text: "👉 【按鈕 C】：他們叫我跟他們猜拳，贏了才能跟教授繼續通話。", nextNode: "fail_6" }
+                ]
             },
-            // B-B 失敗
-            routeB_B_fail: {
-                text: "【結局：不可饒恕】<br><br>你霸氣掛掉電話。等下午你清醒走到學校時，發現你的置物櫃已經被清空，教授在黑板上寫著你的大名，旁邊畫了一個大大的叉叉。<br><br>❌ 挑戰失敗！敢掛瘋狂班導的電話，你是第一人，也是重修的第一人。",
-                image: "🤬💥",
-                options: [{ text: "🔄 乖乖重來，這次客氣點", nextNode: "start", isRestart: true }]
+            // ----- 第 3 層 分支 -----
+            routeB_3: {
+                text: "【分支 3：極限圓周率】<br><br>教授在電話那頭倒吸一口涼氣：『小數點後100位？！連我都背不出來！那你怎麼回答的？』這時候你決定：",
+                image: "📊🔢",
+                options: [
+                    { text: "👉 【按鈕 A】：我直接大聲念出我初戀情人的生日和身分證字號，反正外星人也聽不懂。", nextNode: "fail_7" },
+                    { text: "👉 【按鈕 B】：我當場裝出電子雜音：『嗶...教授...外星人說要直接跟你線上對質叮噹考！』並把電話轉接給同學。", nextNode: "routeB_4" },
+                    { text: "👉 【按鈕 C】：我跟外星人說：『圓周率其實是個陰謀，宇宙是正方形的。』", nextNode: "fail_8" }
+                ]
             },
-            // B-C 唯一通關結局
-            routeB_C_win: {
-                text: "【👑 唯一通關：大老二星際外交官】<br><br>教授一聽到『外星人要賭大老二』，身為瘋狂班導的賭性瞬間被激發！他立刻在電話裡瘋狂指導你：『聽著！先出鐵支！不要留梅花三！』<br><br>在教授的遠端神指揮下，你成功（在想像中）擊敗了外星人。教授非常高興，認為你為地球爭光，不僅沒當你，還直接給了你期末總成績 100 分！<br><br>🎉 恭喜通關！你成為了傳說中的星際大老二之神！",
+            // ----- 第 4 層 分支 -----
+            routeB_4: {
+                text: "【分支 4：神隊友上線】<br><br>電話那頭傳來你同學（其實是你在宿舍的室友）用低沉嗓音裝出的外星人聲音：『愚蠢的教授，聽好了...』教授震驚了！這時同學暗示你給個劇本，你決定傳簡訊叫同學說：",
+                image: "📡👥",
+                options: [
+                    { text: "👉 【按鈕 A】：『叫你們校長出來跟我打大老二，不然我毀滅地球。』", nextNode: "fail_9" },
+                    { text: "👉 【按鈕 B】：『這位同學的叮噹期末考由我們接管了，我們要當場在母艦上幫他舉行星際大戰。』", nextNode: "routeB_5" },
+                    { text: "👉 【按鈕 C】：『其實我們不是外星人，我們是死神，你被當了。』", nextNode: "fail_10" }
+                ]
+            },
+            // ----- 第 5 層 分支 -----
+            routeB_5: {
+                text: "【分支 5：命運的最終決擇】<br><br>教授完全信了！他對著電話大喊：『好！身為瘋狂班導，我不能丟地球人的臉！同學，我現在出最後一題，你答對就給你及格！外星母艦的重力加速度是多少？！』這真的是最後一關了，你決定賭這個答案：",
+                image: "🛸🚀",
+                options: [
+                    { text: "👉 【按鈕 A】：地球的兩倍！也就是 19.6 m/s²！", nextNode: "fail_11" },
+                    { text: "👉 【按鈕 B】：既然是外星母艦，重力一定是 0！因為在太空中是失重的！", nextNode: "win_ending" },
+                    { text: "👉 【按鈕 C】：重力是無限大，因為他們的科技超越物理定律！", nextNode: "fail_12" }
+                ]
+            },
+            // ----- 結局資料庫 -----
+            win_ending: {
+                text: "【👑 唯一通關：星際叮噹之神】<br><br>你大喊：『是 0！太空中根本沒有重力！』教授在電話那頭愣住，隨後瘋狂鼓掌：『天才！你竟然沒有被我挖的物理陷阱騙到！外星人也被你的智慧折服了！』<br><br>🎉 恭喜通關！教授不僅沒當你，還直接給了你期末總成績 100 分，你順利畢業啦！",
                 image: "👑🃏",
                 options: [{ text: "🎉 太神啦！再玩一局", nextNode: "start", isRestart: true }]
-            }
+            },
+            fail_1: { text: "【結局：物理崩壞】<br><br>你全速狂飆，在校門口過彎時因為時速 50 公里摩擦生熱，鞋底直接燒起來，滑進警衛室被依危險駕駛移送法辦。<br><br>❌ 挑戰失敗！期末考直接 0 分。", image: "🏃‍♂️🔥", options: [{ text: "🔄 重新投胎", nextNode: "start", isRestart: true }] },
+            fail_2: { text: "【結局：鹹魚的代價】<br><br>你躺回去繼續睡，下午確實吃到了香噴噴的烤肉。但打開手機一看，教授公告：『今天沒來參加叮噹考的，下學期再見。』<br><br>❌ 挑戰失敗！重修車票一張。", image: "🥩😴", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_3: { text: "【結局：毫無創意的謊言】<br><br>教授冷笑：『警衛大叔今天請假，你在說什麼鬼話？』掛斷。<br><br>❌ 挑戰失敗！直接被當。", image: "🤡❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_4: { text: "【結局：你在肚子餓嗎】<br><br>教授冷冷地說：『同學，你想吃滷肉飯就直說，不用編這種肚子餓的謊話。』<br><br>❌ 挑戰失敗！明年請早。", image: "🍚❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_5: { text: "【結局：科幻小說看太多】<br><br>教授說：『那是《銀河便車指南》的梗，少拿小說來糊弄我！』掛斷。<br><br>❌ 挑戰失敗！", image: "📕❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_6: { text: "【結局：運氣太差】<br><br>你在電話裡跟外星人猜拳，結果你出了剪刀，外星人出了激光槍，你輸了。外星人把你掛斷了。<br><br>❌ 挑戰失敗！", image: "✌️❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_7: { text: "【結局：演技拙劣】<br><br>你念得太順暢，教授聽出來那是身分證字號：『同學，圓周率裡面最好是有英文字母。』<br><br>❌ 挑戰失敗！被當！", image: "🆔❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_8: { text: "【結局：教授是理科狂】<br><br>身為科學狂人的教授憤怒大喊：『宇宙怎麼可能是正方形的！汙辱科學！當掉！』<br><br>❌ 挑戰失敗！", image: "🟥❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_9: { text: "【結局：引火自焚】<br><br>室友講得太囂張，校長剛好在教授旁邊剔牙。校長大怒，直接判定你記大過退學。<br><br>❌ 挑戰失敗！", image: "🏫❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_10: { text: "【結局：室友搞砸了】<br><br>室友太想當你，直接在電話裡說：『其實我是你爸，你被當了。』教授怒掛電話。<br><br>❌ 挑戰失敗！", image: "👥❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_11: { text: "【結局：慘遭大自然制裁】<br><br>你回答 19.6。教授大笑：『那是地球重力的兩倍，但母艦在太空是失重的！你物理重修吧！』<br><br>❌ 挑戰失敗！", image: "📉❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
+            fail_12: { text: "【結局：黑洞爆炸】<br><br>無限大重力會直接變成黑洞，母艦當場被吸進去，你也跟著消失在宇宙中。<br><br>❌ 挑戰失敗！", image: "🕳️❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] }
         };
 
-        // 遊戲核心驅動函式
+        // 遊戲核心跳轉引擎
         function goToNode(nodeKey) {
             const node = storyData[nodeKey];
             if (!node) return;
-
-            // 更新搞笑迷因圖標 / 照片區
             document.getElementById('game-image').innerHTML = node.image;
-            
-            // 更新故事文字
             document.getElementById('game-story').innerHTML = node.text;
-            
-            // 清空舊按鈕並生成新按鈕
-            const optionsContainer = document.getElementById('game-options');
-            optionsContainer.innerHTML = "";
-            
+            const container = document.getElementById('game-options');
+            container.innerHTML = "";
             node.options.forEach(opt => {
-                const button = document.createElement('button');
-                button.innerHTML = opt.text;
-                
-                // 如果是重新開始按鈕，給予特殊綠色外觀
-                if (opt.isRestart) {
-                    button.classList.add('restart-btn');
-                }
-                
-                // 綁定點擊事件，通往下一段劇情
-                button.addEventListener('click', () => {
-                    goToNode(opt.nextNode);
-                });
-                
-                optionsContainer.appendChild(button);
+                const btn = document.createElement('button');
+                btn.innerHTML = opt.text;
+                if (opt.isRestart) btn.classList.add('restart-btn');
+                btn.addEventListener('click', () => goToNode(opt.nextNode));
+                container.appendChild(btn);
             });
         }
-
-        // 遊戲初始化，從 start 節點開始
         goToNode('start');
     </script>
 </body>
