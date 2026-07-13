@@ -26,104 +26,61 @@
     </div>
 
     <script>
-        // 完整的 5 層 ABC 選項大劇本資料庫
+        // 完整的 5 層 ABC 網狀劇本資料庫
         const storyData = {
+            // 【起點】
             start: {
                 text: "【早上 8:45，你猛然驚醒！】<br><br>今天『叮噹期末考』你快遲到了！這堂課的教授出了名的瘋狂，遲到一秒直接當掉。這時候你決定...",
                 image: "🤤💤",
                 options: [
-                    { text: "👉 【按鈕 A】：施展火影跑，用時速 50 公里狂飆去學校！", nextNode: "fail_1" },
+                    { text: "👉 【按鈕 A】：施展火影跑，用時速 50 公里狂飆去學校！", nextNode: "routeA_1" },
                     { text: "👉 【按鈕 B】：打電話給教授，騙他說你被外星人綁架了。", nextNode: "routeB_1" },
-                    { text: "👉 【按鈕 C】：既然都遲到了，乾脆躺回去繼續睡，下午再去吃烤肉。", nextNode: "fail_2" }
+                    { text: "👉 【按鈕 C】：既然都遲到了，乾脆躺回去繼續睡，下午再去吃烤肉。", nextNode: "routeC_1" }
                 ]
             },
-            // ----- 第 1 層 分支 -----
-            routeB_1: {
-                text: "【分支 1：星際謊言】<br><br>教授接起電話。你大喊被外星人綁架了！教授冷笑：『喔？外星人長怎樣？說不出來立刻當！』你決定回答：",
-                image: "👽📞",
+            // ===== 完整 A 路線 (火影狂飆) =====
+            routeA_1: {
+                text: "【A-第 1 關：致命紅燈】<br><br>你全速狂飆，在校門前十字路口遇到紅燈，時間是 8:51！你決定：",
+                image: "🏃‍♂️🔥",
                 options: [
-                    { text: "👉 【按鈕 A】：皮膚是綠色的，長得很像學校大門口的警衛大叔。", nextNode: "fail_3" },
-                    { text: "👉 【按鈕 B】：他們全身散發霓虹光，手上拿著微積分課本，說要跟我對決叮噹考！", nextNode: "routeB_2" },
-                    { text: "👉 【按鈕 C】：他們是一坨巨大的會飄浮的滷肉飯，正在把我塞進電鍋。", nextNode: "fail_4" }
+                    { text: "👉 【按鈕 A】：管他的直接強行闖過去！", nextNode: "fail_A1" },
+                    { text: "👉 【按鈕 B】：繞進一旁的後巷排水溝捷徑。", nextNode: "routeA_2" },
+                    { text: "👉 【按鈕 C】：乖乖等紅燈，對著路人跳舞求載。", nextNode: "fail_A2" }
                 ]
             },
-            // ----- 第 2 層 分支 -----
-            routeB_2: {
-                text: "【分支 2：外星考題】<br><br>教授聽了非常興奮：『微積分外星人？有意思！那外星人考你什麼題目？』你大腦飛速運轉，決定扯出這個題目：",
-                image: "🧠⚡",
+            routeA_2: {
+                text: "【A-第 2 關：水溝抉擇】<br><br>你跳進排水溝，發現前方有兩條管線，一條通往女宿，一條通往科學館大樓：",
+                image: "🕳️🐀",
                 options: [
-                    { text: "👉 【按鈕 A】：他們問我宇宙的盡頭是不是 42？", nextNode: "fail_5" },
-                    { text: "👉 【按鈕 B】：他們要我當場心算 π（圓周率）的小數點後第 100 位！", nextNode: "routeB_3" },
-                    { text: "👉 【按鈕 C】：他們叫我跟他們猜拳，贏了才能跟教授繼續通話。", nextNode: "fail_6" }
+                    { text: "👉 【按鈕 A】：走女宿管線，可能比較近。", nextNode: "fail_A3" },
+                    { text: "👉 【按鈕 B】：走科學館大樓管線，直達考場。", nextNode: "routeA_3" },
+                    { text: "👉 【按鈕 C】：在原地大喊救命求救援。", nextNode: "fail_A4" }
                 ]
             },
-            // ----- 第 3 層 分支 -----
-            routeB_3: {
-                text: "【分支 3：極限圓周率】<br><br>教授在電話那頭倒吸一口涼氣：『小數點後100位？！連我都背不出來！那你怎麼回答的？』這時候你決定：",
-                image: "📊🔢",
+            routeA_3: {
+                text: "【A-第 3 關：科學館的天花板】<br><br>你爬到了科學館的天花板通風口，正下方就是考場！但通風口鐵網卡住了：",
+                image: "🧱🏢",
                 options: [
-                    { text: "👉 【按鈕 A】：我直接大聲念出我初戀情人的生日和身分證字號，反正外星人也聽不懂。", nextNode: "fail_7" },
-                    { text: "👉 【按鈕 B】：我當場裝出電子雜音：『嗶...教授...外星人說要直接跟你線上對質叮噹考！』並把電話轉接給同學。", nextNode: "routeB_4" },
-                    { text: "👉 【按鈕 C】：我跟外星人說：『圓周率其實是個陰謀，宇宙是正方形的。』", nextNode: "fail_8" }
+                    { text: "👉 【按鈕 A】：直接用頭給它撞開，重力加速度衝下去！", nextNode: "fail_A5" },
+                    { text: "👉 【按鈕 B】：用口袋裡的瑞士刀偷偷撬開螺絲。", nextNode: "routeA_4" },
+                    { text: "👉 【按鈕 C】：在上面唱歌引起教授注意幫你開門。", nextNode: "fail_A6" }
                 ]
             },
-            // ----- 第 4 層 分支 -----
-            routeB_4: {
-                text: "【分支 4：神隊友上線】<br><br>電話那頭傳來你同學（其實是你在宿舍的室友）用低沉嗓音裝出的外星人聲音：『愚蠢的教授，聽好了...』教授震驚了！這時同學暗示你給個劇本，你決定傳簡訊叫同學說：",
-                image: "📡👥",
+            routeA_4: {
+                text: "【A-第 4 關：考場天降】<br><br>你成功撬開螺絲，從天花板無聲落地！但你落地的位置剛好在瘋狂班導的正後方：",
+                image: "🥷🥋",
                 options: [
-                    { text: "👉 【按鈕 A】：『叫你們校長出來跟我打大老二，不然我毀滅地球。』", nextNode: "fail_9" },
-                    { text: "👉 【按鈕 B】：『這位同學的叮噹期末考由我們接管了，我們要當場在母艦上幫他舉行星際大戰。』", nextNode: "routeB_5" },
-                    { text: "👉 【按鈕 C】：『其實我們不是外星人，我們是死神，你被當了。』", nextNode: "fail_10" }
+                    { text: "👉 【按鈕 A】：使出火影忍者『千年殺』偷襲教授！", nextNode: "fail_A7" },
+                    { text: "👉 【按鈕 B】：輕輕拍拍教授肩膀：『老師，我想交叮噹考卷。』", nextNode: "routeA_5" },
+                    { text: "👉 【按鈕 C】：立刻鑽到隔壁同學的課桌椅底下偽裝成垃圾桶。", nextNode: "fail_A8" }
                 ]
             },
-            // ----- 第 5 層 分支 -----
-            routeB_5: {
-                text: "【分支 5：命運的最終決擇】<br><br>教授完全信了！他對著電話大喊：『好！身為瘋狂班導，我不能丟地球人的臉！同學，我現在出最後一題，你答對就給你及格！外星母艦的重力加速度是多少？！』這真的是最後一關了，你決定賭這個答案：",
-                image: "🛸🚀",
+            routeA_5: {
+                text: "【A-第 5 關：最終交卷判決】<br><br>教授猛然轉頭，看到渾身是泥巴的你。他冷笑一線：『有鬥志！但你沒帶筆，這張是零分！』此時你要遞出什麼：",
+                image: "📝👨‍🏫",
                 options: [
-                    { text: "👉 【按鈕 A】：地球的兩倍！也就是 19.6 m/s²！", nextNode: "fail_11" },
-                    { text: "👉 【按鈕 B】：既然是外星母艦，重力一定是 0！因為在太空中是失重的！", nextNode: "win_ending" },
-                    { text: "👉 【按鈕 C】：重力是無限大，因為他們的科技超越物理定律！", nextNode: "fail_12" }
+                    { text: "👉 【按鈕 A】：把口袋裡的立體歐帕糖直接塞進他嘴裡！", nextNode: "win_A" },
+                    { text: "👉 【按鈕 B】：遞出你的手機，給他看你的大老二遊戲戰績。", nextNode: "fail_A9" },
+                    { text: "👉 【按鈕 C】：當場給他跪下哭喊媽媽我錯了。", nextNode: "fail_A10" }
                 ]
             },
-            // ----- 結局資料庫 -----
-            win_ending: {
-                text: "【👑 唯一通關：星際叮噹之神】<br><br>你大喊：『是 0！太空中根本沒有重力！』教授在電話那頭愣住，隨後瘋狂鼓掌：『天才！你竟然沒有被我挖的物理陷阱騙到！外星人也被你的智慧折服了！』<br><br>🎉 恭喜通關！教授不僅沒當你，還直接給了你期末總成績 100 分，你順利畢業啦！",
-                image: "👑🃏",
-                options: [{ text: "🎉 太神啦！再玩一局", nextNode: "start", isRestart: true }]
-            },
-            fail_1: { text: "【結局：物理崩壞】<br><br>你全速狂飆，在校門口過彎時因為時速 50 公里摩擦生熱，鞋底直接燒起來，滑進警衛室被依危險駕駛移送法辦。<br><br>❌ 挑戰失敗！期末考直接 0 分。", image: "🏃‍♂️🔥", options: [{ text: "🔄 重新投胎", nextNode: "start", isRestart: true }] },
-            fail_2: { text: "【結局：鹹魚的代價】<br><br>你躺回去繼續睡，下午確實吃到了香噴噴的烤肉。但打開手機一看，教授公告：『今天沒來參加叮噹考的，下學期再見。』<br><br>❌ 挑戰失敗！重修車票一張。", image: "🥩😴", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_3: { text: "【結局：毫無創意的謊言】<br><br>教授冷笑：『警衛大叔今天請假，你在說什麼鬼話？』掛斷。<br><br>❌ 挑戰失敗！直接被當。", image: "🤡❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_4: { text: "【結局：你在肚子餓嗎】<br><br>教授冷冷地說：『同學，你想吃滷肉飯就直說，不用編這種肚子餓的謊話。』<br><br>❌ 挑戰失敗！明年請早。", image: "🍚❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_5: { text: "【結局：科幻小說看太多】<br><br>教授說：『那是《銀河便車指南》的梗，少拿小說來糊弄我！』掛斷。<br><br>❌ 挑戰失敗！", image: "📕❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_6: { text: "【結局：運氣太差】<br><br>你在電話裡跟外星人猜拳，結果你出了剪刀，外星人出了激光槍，你輸了。外星人把你掛斷了。<br><br>❌ 挑戰失敗！", image: "✌️❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_7: { text: "【結局：演技拙劣】<br><br>你念得太順暢，教授聽出來那是身分證字號：『同學，圓周率裡面最好是有英文字母。』<br><br>❌ 挑戰失敗！被當！", image: "🆔❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_8: { text: "【結局：教授是理科狂】<br><br>身為科學狂人的教授憤怒大喊：『宇宙怎麼可能是正方形的！汙辱科學！當掉！』<br><br>❌ 挑戰失敗！", image: "🟥❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_9: { text: "【結局：引火自焚】<br><br>室友講得太囂張，校長剛好在教授旁邊剔牙。校長大怒，直接判定你記大過退學。<br><br>❌ 挑戰失敗！", image: "🏫❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_10: { text: "【結局：室友搞砸了】<br><br>室友太想當你，直接在電話裡說：『其實我是你爸，你被當了。』教授怒掛電話。<br><br>❌ 挑戰失敗！", image: "👥❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_11: { text: "【結局：慘遭大自然制裁】<br><br>你回答 19.6。教授大笑：『那是地球重力的兩倍，但母艦在太空是失重的！你物理重修吧！』<br><br>❌ 挑戰失敗！", image: "📉❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] },
-            fail_12: { text: "【結局：黑洞爆炸】<br><br>無限大重力會直接變成黑洞，母艦當場被吸進去，你也跟著消失在宇宙中。<br><br>❌ 挑戰失敗！", image: "🕳️❌", options: [{ text: "🔄 重新挑戰", nextNode: "start", isRestart: true }] }
-        };
-
-        // 遊戲核心跳轉引擎
-        function goToNode(nodeKey) {
-            const node = storyData[nodeKey];
-            if (!node) return;
-            document.getElementById('game-image').innerHTML = node.image;
-            document.getElementById('game-story').innerHTML = node.text;
-            const container = document.getElementById('game-options');
-            container.innerHTML = "";
-            node.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.innerHTML = opt.text;
-                if (opt.isRestart) btn.classList.add('restart-btn');
-                btn.addEventListener('click', () => goToNode(opt.nextNode));
-                container.appendChild(btn);
-            });
-        }
-        goToNode('start');
-    </script>
-</body>
-</html>
