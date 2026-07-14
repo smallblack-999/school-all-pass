@@ -21,12 +21,11 @@
 <body>
     <div class="game-container">
         <div id="game-image" class="image-placeholder"></div>
-        <div id="game-story" class="story-text">載入無版權照片中...</div>
+        <div id="game-story" class="story-text">載入遊戲中...</div>
         <div id="game-options" class="btn-container"></div>
     </div>
     <script>
         const storyData = {
-            // 【起點：睡過頭】
             start: {
                 text: "【早上 8:45，你猛然驚醒！】<br><br>今天『叮噹期末考』你快遲到了！這堂課的瘋狂班導出了名的嚴格，遲到一秒直接當掉。這時候你決定...",
                 imgUrl: "https://unsplash.com",
@@ -36,7 +35,6 @@
                     { text: "👉 【按鈕 C】：反正都遲到了，先播 67 迷因大喊：『阿嬤哩今嘛在叨位？』然後繼續睡。", nextNode: "node_C" }
                 ]
             },
-            // ==================== A 路線無版權相片映射 ====================
             node_A: {
                 text: "【A-第 1 輪：校門拦截】<br><br>你剛狂飆到校門口，警衛大叔突然攔下你說：『小伙子，聽說你很勇喔？沒帶准考證不准進去！』這時你決定：",
                 imgUrl: "https://unsplash.com",
@@ -101,7 +99,7 @@
                 ]
             },
             node_A2_A: {
-                text: "【A-第 3 輪：後門溜入】<br><br>你剛溜進教室，班導一雙死魚眼瞬間掃向你！怒斥：『同學！你在鬼鬼祟祟什麼？！']你決定：",
+                text: "【A-第 3 輪：後門溜入】<br><br>你剛溜進教室，班導一雙死魚眼瞬間掃向你！怒斥：『同學！你在鬼鬼祟祟什麼？！』你決定：",
                 imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【A2-A-1】：立刻唱紅姐的：『多麼痛的領悟～』干擾老師聽覺。", nextNode: "fail_A8" },
@@ -122,7 +120,7 @@
                 text: "【A-第 3 輪：講台罰站測試】<br><br>你站在講台旁邊，班導冷笑：『好，五分鐘到了，坐下！現考題：杰哥的瑞穗鮮乳一瓶多少錢？』你決定回答：",
                 imgUrl: "https://unsplash.com",
                 options: [
-                    { text: "👉 【A2-C-1】：『報告班導，對味的麥香是10元，所以鮮乳是67元！』", nextNode: "fail_A14" },
+                    { text: "👉 【A2-C-1】：『報告班導，對味的麥香小鋁箔包是10元，所以鮮乳是67元！』", nextNode: "fail_A14" },
                     { text: "👉 【A2-C-2】：『外星人說紅姐唱多麼痛的領悟不用錢，所以鮮乳是免費的！』", nextNode: "node_perfect_final" },
                     { text: "👉 【A2-C-3】：汪汪汪！不知道，一律學狗叫！", nextNode: "fail_A15" }
                 ]
@@ -160,7 +158,7 @@
                 imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【選項 B1】：『對！我跟外星人在杰哥家喝瑞穗鮮乳，杰哥家房子還蠻大的。』", nextNode: "node_B1" },
-                    { text: "👉 【選項 B2】：『老師我沒騙你，紅姐現在就在我旁邊唱多麼痛的領悟，不信你聽！』", nextNode: "node_B2" },
+                    { text: "👉 【選項 B2】：『老師我沒騙地，紅姐現在就在我旁邊唱多麼痛的領悟，不信你聽！』", nextNode: "node_B2" },
                     { text: "👉 【選項 B3】：『外星人正在播 67 語音，問我阿嬤到底在叨位，我快瘋了。』", nextNode: "node_B3" }
                 ]
             },
@@ -268,20 +266,23 @@
                 imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【B3-C-1】：叫杰哥去班導家進行心理輔導。", nextNode: "fail_B25" },
-                    { text: "👉 【B3-C-2】：在全校廣播大播 67
+                    { text: "👉 【B3-C-2】：在全校廣播大播 67 語音：『阿嬤哩今嘛在叨位？』覆蓋怒吼。", nextNode: "fail_B26" },
+                    { text: "👉 立刻跪在地上學狗叫，一路爬進學校認錯。", nextNode: "node_perfect_final" }
+                ]
+            },
             // ==================== C 路線完全展開 ====================
             node_C: {
                 text: "【C-第 1 輪：鹹魚阿嬤躺】<br><br>你躺在床上播 67 迷因，房間大門被猛然踹開！瘋狂班導帶著教官來抓人了：『起來站五分鐘再坐下！』此時你決定：",
-                imgUrl: "https://unsplash.com", // 舒適凌亂的床鋪
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【選項 C1】：立刻立正站好：『報告班導，我站十分鐘，現在可以去吃烤肉了嗎？』", nextNode: "node_C1" },
                     { text: "👉 【選項 C2】：當場給班導一個熱情的擁抱，唱：『多麼痛的領悟～班導你來看我了！』", nextNode: "node_C2" },
-                    { text: "👉 【選項 C3】：直接躲進棉被裡，學狗叫汪汪兩聲，假裝自己是寵物狗。", nextNode: "node_C3" }
+                    { text: "👉 【選項 C3】：直接躲進棉便裡，學狗叫汪汪兩聲，假裝自己是寵物狗。", nextNode: "node_C3" }
                 ]
             },
             node_C1: {
                 text: "【C-第 2 輪：宿舍站五分鐘】<br><br>你在宿舍立正站好，班導冷哼：『有態度！但現在去考場已經遲到 20 分鐘了！』教官在一旁剔牙，你決定：",
-                imgUrl: "https://unsplash.com", // 嚴肅的學校教室/宿舍走廊感
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【選項 C1-A】：大喊：『杰哥有重機！杰哥可以載我衝過去！』", nextNode: "node_C1_A" },
                     { text: "👉 【選項 C1-B】：當場跪在地上學狗叫，咬住班導的褲管求情。", nextNode: "node_C1_B" },
@@ -290,7 +291,7 @@
             },
             node_C2: {
                 text: "【C-第 2 輪：擁抱班導反擊】<br><br>班導滿臉黑線推開你：『同學...你有口臭，而且今天期期考你當定了。』這時你決定使出終極迷因：",
-                imgUrl: "https://unsplash.com", // 憤怒嚴厲的老師黑臉盯著你看
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【選項 C2-A】：指著窗外大喊：『看！杰哥帶著麵包來了！』", nextNode: "node_C2_A" },
                     { text: "👉 【選項 C2-B】：立刻在原地學狗叫汪汪汪，轉移殺氣。", nextNode: "node_C2_B" },
@@ -298,8 +299,8 @@
                 ]
             },
             node_C3: {
-                text: "【C-第 2 輪：棉被防線破裂】<br><br>班導一把扯開被子，教官掏出了記過單！你決定：",
-                imgUrl: "https://unsplash.com", // 學校辦公桌上準備寫單子懲罰
+                text: "【C-第 2 輪：棉便防線破裂】<br><br>班導一把扯開被子，教官掏出了記過單！你決定：",
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【選項 C3-A】：汪汪大叫，並咬住教官的手指：『杰哥不要啊！』", nextNode: "fail_C18" },
                     { text: "👉 【選項 C3-B】：改唱紅姐的：『多麼痛的領悟～不要記我過！』", nextNode: "fail_C19" },
@@ -307,8 +308,8 @@
                 ]
             },
             node_C1_A: {
-                text: "【C-第 3 輪：杰哥重機狂飆】<br><br>重機引擎聲響徹走廊！杰哥載你大喊：『上車！帶你去好玩的叮噹考！』你決定：",
-                imgUrl: "https://unsplash.com", // 狂飆重型機車
+                text: "【C-第 3 輪：杰哥重機狂飆】<br><br>杰哥真的騎重機衝進宿舍大樓大喊：『上車！帶你去好玩的叮噹考！』你決定：",
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【C1-A-1】：大喊：『杰哥不要啊！』然後跳窗逃跑。", nextNode: "fail_C1" },
                     { text: "👉 【C1-A-2】：上車跟杰哥一起合唱紅姐的：『多麼痛的領悟～』", nextNode: "fail_C2" },
@@ -317,7 +318,7 @@
             },
             node_C1_B: {
                 text: "【C-第 3 輪：咬住褲管不放】<br><br>你死咬班導褲管。班導大吼：『鬆口！不然讓你重修到67歲！』你決定：",
-                imgUrl: "https://unsplash.com", // 憤怒死咬不放的狗咬人畫面
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【C1-B-1】：咬得更用力，並用眼神示意杰哥來救你。", nextNode: "fail_C4" },
                     { text: "👉 【C1-B-2】：鬆開口，開始大唱紅姐的：『多麼痛的領悟～』", nextNode: "fail_C5" },
@@ -326,16 +327,16 @@
             },
             node_C1_C: {
                 text: "【C-第 3 輪：路邊大迷路】<br><br>班導跟著你跑到路邊大喊找阿嬤，時間來到 9:15，考試早結束了。你決定：",
-                imgUrl: "https://unsplash.com", // 空盪盪的路邊時鐘指著遲到時間
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【C1-C-1】：指著遠方：『看！杰哥在那邊幫阿嬤買瑞穗鮮乳！』", nextNode: "fail_C7" },
-                    { text: "👉 【C1-C-2】：對著天空大唱紅姐的：『多麼痛的領悟～期末考沒了！』", nextNode: "fail_C8" },
+                    { text: "👉 Cast 4：『多麼痛的領悟～期末考沒了！』", nextNode: "fail_C8" },
                     { text: "👉 趁班導和教官不注意，偷偷開溜去吃烤肉。", nextNode: "fail_C9" }
                 ]
             },
             node_C2_A: {
-                text: "【C-第 3 輪：流浪狗突襲】<br><br>你剛衝出宿舍就被成群的學校校狗包圍了！你決定：",
-                imgUrl: "https://unsplash.com", // 一群狂吠包圍的凶狠流浪狗
+                text: "【C-第 3 輪：流浪狗突襲】<br><br>你剛衝出宿舍就被流浪狗群包圍了！你決定：",
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【C2-A-1】：加入牠們，一起對著天空狂學狗叫汪汪汪！", nextNode: "fail_C10" },
                     { text: "👉 【C2-A-2】：掏出手機大播 67 語音：『阿嬤哩今嘛在叨位？』嚇狗。", nextNode: "fail_C11" },
@@ -343,8 +344,8 @@
                 ]
             },
             node_C2_B: {
-                text: "【C-第 3 輪：校狗示範罰站】<br><br>班導命令校狗起來站五分鐘示範給你玩，校狗竟然真的兩腳站起來了！你決定：",
-                imgUrl: "https://unsplash.com", // 穿著衣服兩隻腳站立搞笑的狗
+                text: "【C-第 3 輪：校狗示範罰站】<br><br>班導命令校狗起來站五分鐘示範給你玩，校狗真的站起來了！你決定：",
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【C2-B-1】：對校狗大喊：『杰哥不要！聽狗哥的話！』", nextNode: "fail_C13" },
                     { text: "👉 【C2-B-2】：和校狗一起大合唱紅姐的：『多麼痛的領悟～』", nextNode: "fail_C14" },
@@ -353,31 +354,58 @@
             },
             node_C2_C: {
                 text: "【C-第 3 輪：沒裝SIM卡穿幫】<br><br>班導發現你手機根本沒裝 SIM 卡！大穿幫！你決定：",
-                imgUrl: "https://unsplash.com", // 手機畫面壞掉或顯示無訊號穿幫
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【C2-C-1】：大喊：『這就是杰哥的超能力！不用卡也能通話！』", nextNode: "fail_C16" },
                     { text: "👉 當場聲淚俱下大唱紅姐：『多麼痛的領悟～我沒繳電話費！』", nextNode: "fail_C17" },
                     { text: "👉 立刻就地正法，自己起來站五分鐘認錯。", nextNode: "node_perfect_final" }
                 ]
             },
+            node_C3_A: {
+                text: "【C-第 3 輪：手銬危機】<br><br>教官痛大喊快放開，班導拿出了手銬！生死一瞬你決定：",
+                imgUrl: "https://unsplash.com",
+                options: [
+                    { text: "👉 【C3-A-1】：死不鬆口，大放紅姐高音：『多麼痛的領悟！』", nextNode: "fail_C18" },
+                    { text: "👉 【C3-A-2】：立刻鬆口，喊 67 語音：『阿嬤哩今嘛在叨位？教官打人！』", nextNode: "fail_C19" },
+                    { text: "👉 乖乖伸手給班導銬：『老師！我自己去禁閉室站五分鐘！』", nextNode: "fail_C20" }
+                ]
+            },
+            node_C3_B: {
+                text: "【C-第 3 輪：教官狂寫記過單】<br><br>教官一邊寫一邊搖擺：『多麼痛的領悟～大過一隻～』你祭出最後一招：",
+                imgUrl: "https://unsplash.com",
+                options: [
+                    { text: "👉 【C3-B-1】：指著教官的禿頭大喊：『看！杰哥的探照燈！』", nextNode: "fail_C21" },
+                    { text: "👉 【C3-B-2】：趴在地上瘋狂學狗叫，試圖把記過單咬碎。", nextNode: "fail_C22" },
+                    { text: "👉 狂播 67 語音：『阿嬤哩今嘛在叨位？阿嬤叫你不准記過！』", nextNode: "fail_C23" }
+                ]
+            },
+            node_C3_C: {
+                text: "【C-第 3 輪：阿嬤去台中吃烤肉】<br><br>教官冷笑：『67阿嬤今天早上已經跟杰哥去台中吃烤肉了！你穿幫了！』你決定：",
+                imgUrl: "https://unsplash.com",
+                options: [
+                    { text: "👉 【C3-C-1】：『可惡！多麼痛的領悟！阿嬤竟然背叛我！』", nextNode: "fail_C24" },
+                    { text: "👉 【C3-C-2】：『我也要去台中吃烤肉！再見！』衝向火車站。", nextNode: "fail_C25" },
+                    { text: "👉 當場趴在地上學狗叫，假裝自己是阿嬤養的警衛犬。", nextNode: "fail_C26" }
+                ]
+            },
             // ==================== 完美唯一的決戰第 4 輪 ====================
             node_perfect_final: {
                 text: "【👑 最終決戰：瘋狂班導的質疑】<br><br>你驚人的迷因能量震撼了全場！瘋狂班導揉揉眼睛，指著你大喊：『好！既然你突破了重重關卡站到這裡...最後一關！紅姐暴紅的名曲到底是哪一首？！』",
-                imgUrl: "https://unsplash.com", // 閃耀神聖光芒的麥克風舞台
+                imgUrl: "https://unsplash.com",
                 options: [
                     { text: "👉 【按鈕 A】：『杰哥不要之歌！』", nextNode: "fail_final" },
-                    { text: "👉 【按鈕 B】：『多麼痛的領悟！！！』", nextNode: "win_game" },
+                    { text: "👉 【按鈕 B】：『多麼痛的領悟！！！ Rhodes』", nextNode: "win_game" },
                     { text: "👉 【按鈕 C】：『阿嬤哩今嘛在叨位！』", nextNode: "fail_final" }
                 ]
             },
             win_game: {
-                text: "【🏆 唯一通關結局：迷因叮噹之神！】<br><br>當你大喊出『多麼痛的領悟』時，全辦公室的老師、全校的校狗、還有 67 阿嬤通通跳出來為你瘋狂鼓掌！班導流下眼淚：『太對味了！你才是真正的迷因之王！』<br><br>🎉 恭喜通關！班導給了你期末總成績 100 分，你順利畢業，並且可以跟杰哥、紅姐一起去台中吃烤肉啦！",
-                imgUrl: "https://unsplash.com", // 瘋狂噴金粉慶祝的大型派對狂歡
+                text: "【🏆 唯一通關結局：迷因叮噹之神！】<br><br>當你大喊出『多麼痛的領悟』時，全辦公室的老師、全校的校狗、還有 67 阿嬤通通跳出來為校園大瘋狂鼓掌！班導流下眼淚：『太對味了！你才是真正的迷因之王！』<br><br>🎉 恭喜通關！班導給了你期末總成績 100 分，你順利畢業，並且可以跟杰哥、紅姐一起去台中吃烤肉啦！",
+                imgUrl: "https://unsplash.com",
                 options: [{ text: "🎉 太神啦！再玩一局", nextNode: "start", isRestart: true }]
             }
         };
 
-        // 自動生成失敗結局防錯機制與失敗專屬搞笑小丑小狗圖（100%合法無版權）
+        // 自動生成失敗結局防錯機制與失敗專屬小丑圖
         const generateFails = [];
         for(let i=1; i<=24; i++) { generateFails.push("fail_A" + i); }
         for(let i=1; i<=26; i++) { generateFails.push("fail_B" + i); }
@@ -388,7 +416,7 @@
         failNodes.forEach(key => {
             storyData[key] = {
                 text: "【❌ 命運的終結：挑戰失敗】<br><br>很遺憾！在這個分支抉擇中，你的迷因共鳴度不足，或者行為太過荒謬，直接被瘋狂班導抓個正著！<br><br>💀 判決結果：期末叮噹考 0 分，下學期請早起重新修課吧！",
-                imgUrl: "https://unsplash.com", // 一隻表情極度搞笑嘲諷的哈士奇/小丑表情狗
+                imgUrl: "https://unsplash.com",
                 options: [{ text: "🔄 不甘心！重新投胎挑戰", nextNode: "start", isRestart: true }]
             };
         });
@@ -398,9 +426,9 @@
             const node = storyData[nodeKey];
             if (!node) return;
             
-            // 自動判斷並插入 100% 安全無版權高畫質網址照片
+            // 自動判斷並插入網址照片
             if (node.imgUrl) {
-                document.getElementById('game-image').innerHTML = `<img src="${node.imgUrl}" class="game-img" alt="Meme Picture">`;
+                document.getElementById('game-image').innerHTML = `<img src="${node.imgUrl}" class="game-img" alt="Meme">`;
             } else {
                 document.getElementById('game-image').innerHTML = "📸";
             }
